@@ -1,0 +1,3 @@
+rootProject.name = 'appointment_e_line'
+include 'notification'
+include 'appointment_observer'
