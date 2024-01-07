@@ -16,6 +16,6 @@ phases:
       - echo Build completed on `date`
 artifacts:
   files:
-    - buildspec.yml
-    - build/*
-#    - appointment_observer/build/libs/notification-1.0.jar
+#    - buildspec.yml
+#    - notification/build/*
+    - notification/build/libs/notification-1.0.jar
