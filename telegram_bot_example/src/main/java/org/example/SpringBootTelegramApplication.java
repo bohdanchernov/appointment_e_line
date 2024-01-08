@@ -9,16 +9,16 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 @SpringBootApplication
-public class TelegramServer {
+public class SpringBootTelegramApplication {
 
     public static void main(String[] args) {
-//        SpringApplication.run(TelegramServer.class, args);
-        ConfigurableApplicationContext ctx = SpringApplication.run(TelegramServer.class, args);
+        ConfigurableApplicationContext ctx = SpringApplication.run(SpringBootTelegramApplication.class, args);
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-            botsApi.registerBot(ctx.getBean("appointmentNotifyBot", AbilityBot.class));
+            botsApi.registerBot(ctx.getBean("pizzaBot", AbilityBot.class));
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
     }
+
 }

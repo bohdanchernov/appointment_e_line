@@ -1,6 +1,6 @@
 package org.example;
 
-
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.abilitybots.api.bot.BaseAbilityBot;
@@ -16,17 +16,13 @@ import static org.telegram.abilitybots.api.objects.Privacy.PUBLIC;
 import static org.telegram.abilitybots.api.util.AbilityUtils.getChatId;
 
 @Component
-public class AppointmentNotifyBot extends AbilityBot {
+public class PizzaBot extends AbilityBot {
 
-    private final AppointmentResponseHandler responseHandler;
+    private final ResponseHandler responseHandler;
 
-    public AppointmentNotifyBot(String botToken, String botName) {
-        super(botToken, botName);
-        responseHandler = new AppointmentResponseHandler(silent, db);
-    }
-
-    public void nieFound(String nie) {
-        responseHandler.nieFound(nie);
+    public PizzaBot(Environment environment) {
+        super(environment.getProperty("BOT_TOKEN"), "baeldungbot");
+        responseHandler = new ResponseHandler(silent, db);
     }
 
     public Ability startBot() {

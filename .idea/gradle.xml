@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/appointment_observer" />
             <option value="$PROJECT_DIR$/notification" />
+            <option value="$PROJECT_DIR$/telegram_bot_example" />
           </set>
         </option>
       </GradleProjectSettings>
