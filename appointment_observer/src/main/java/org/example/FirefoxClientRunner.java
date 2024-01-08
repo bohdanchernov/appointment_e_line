@@ -7,15 +7,19 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.Select;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
 public class FirefoxClientRunner {
+    @Autowired
+    private RestTemplate restTemplate;
     //Spanish VPN is required
     private static final String START_URL = "https://icp.administracionelectronica.gob.es/icpco/icpplus";
 
@@ -117,16 +121,20 @@ public class FirefoxClientRunner {
             Thread.sleep(5000);
             try {
                 WebElement appointmentResultMessageInfo = driver.findElement(By.className("mf-msg__info"));
-                WebElement message = appointmentResultMessageInfo.findElement(By.tagName("span"));
-                String messageString = message.getText();
-                if (messageString.contains("En este momento no hay citas disponibles")) {
+
+                List<WebElement> message = appointmentResultMessageInfo.findElements(By.tagName("span"));
+
+                if (message != null && !message.isEmpty() && message.get(0).getText().contains("En este momento no hay citas disponibles")) {
                     System.out.println(LocalDateTime.now() + ". " + "Nothing found");
                     Thread.sleep(5000);
                     notFound = false;
+                } else {
+                    restTemplate.getForEntity("http://localhost:8080/nieFound/" + NIE, String.class);
                 }
             } catch (Exception e) {
                 System.out.println(LocalDateTime.now() + ". " + "Appointment might be available");
                 System.out.println(e.getMessage());
+                restTemplate.getForEntity("http://localhost:8080/nieFound/" + NIE, String.class);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());

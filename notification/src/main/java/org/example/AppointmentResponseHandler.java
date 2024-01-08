@@ -74,7 +74,8 @@ public class AppointmentResponseHandler {
     }
 
     private void replyToNieIsAlreadyAdded(long chatId) {
-        replyWithMessage(chatId, "You NIE is already added");
+        String nie = chatNiePair.get(chatId);
+        replyWithMessage(chatId, "You NIE " + nie + " is already added");
     }
 
     private void replyToNieInput(long chatId, Message message) {
