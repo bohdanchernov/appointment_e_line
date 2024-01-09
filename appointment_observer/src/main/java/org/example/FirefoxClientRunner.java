@@ -129,12 +129,12 @@ public class FirefoxClientRunner {
                     Thread.sleep(5000);
                     notFound = false;
                 } else {
-                    restTemplate.getForEntity("http://localhost:8080/nieFound/" + NIE, String.class);
+                    restTemplate.getForEntity("http://localhost:8081/nieFound/" + NIE, String.class);
                 }
             } catch (Exception e) {
                 System.out.println(LocalDateTime.now() + ". " + "Appointment might be available");
                 System.out.println(e.getMessage());
-                restTemplate.getForEntity("http://localhost:8080/nieFound/" + NIE, String.class);
+                restTemplate.getForEntity("http://localhost:8081/nieFound/" + NIE, String.class);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
