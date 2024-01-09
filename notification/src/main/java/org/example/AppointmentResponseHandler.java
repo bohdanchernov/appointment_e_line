@@ -42,19 +42,9 @@ public class AppointmentResponseHandler {
         }
 
         switch (chatStates.get(chatId)) {
-            case AWAITING_NIE: {
-                replyToNieInput(chatId, message);
-                break;
-            }
-
-            case NIE_ADDED: {
-                replyToNieIsAlreadyAdded(chatId);
-                break;
-
-            }
-            default: {
-                unexpectedMessage(chatId);
-            }
+            case AWAITING_NIE -> replyToNieInput(chatId, message);
+            case NIE_ADDED -> replyToNieIsAlreadyAdded(chatId);
+            default -> unexpectedMessage(chatId);
         }
     }
 
