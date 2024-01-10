@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Component
@@ -31,11 +32,16 @@ public class FirefoxClientRunner {
     @Value("${app.observer.user.name}")
     private String NAME_LAST_NAME;
 
+    private boolean isFirstRun = true;
+
     @Scheduled(fixedDelay = 600000, initialDelay = 10000)
     public void runFirefoxAndCheckAppointment() {
-        System.out.println("WEB_DRIVER_PATH: " + WEB_DRIVER_PATH);
-        System.out.println("NIE: " + NIE);
-        System.out.println("NAME_LAST_NAME: " + NAME_LAST_NAME);
+        if (isFirstRun) {
+            System.out.println("WEB_DRIVER_PATH: " + WEB_DRIVER_PATH);
+            System.out.println("NIE: " + NIE);
+            System.out.println("NAME_LAST_NAME: " + NAME_LAST_NAME);
+            isFirstRun = false;
+        }
         if (WEB_DRIVER_PATH == null || WEB_DRIVER_PATH.equals("web.driver.path")) {
             throw new RuntimeException("WebDriver path should be specified");
         }
@@ -125,14 +131,19 @@ public class FirefoxClientRunner {
                 List<WebElement> message = appointmentResultMessageInfo.findElements(By.tagName("span"));
 
                 if (message != null && !message.isEmpty() && message.get(0).getText().contains("En este momento no hay citas disponibles")) {
-                    System.out.println(LocalDateTime.now() + ". " + "Nothing found");
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                    String formattedDateTime = LocalDateTime.now().format(formatter); // "1986-04-08 12:30"
+
+                    System.out.println(formattedDateTime + ". " + "Nothing found");
                     Thread.sleep(5000);
                     notFound = false;
                 } else {
                     restTemplate.getForEntity("http://localhost:8081/nieFound/" + NIE, String.class);
                 }
             } catch (Exception e) {
-                System.out.println(LocalDateTime.now() + ". " + "Appointment might be available");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                String formattedDateTime = LocalDateTime.now().format(formatter); // "1986-04-08 12:30"
+                System.out.println(formattedDateTime + ". " + "Appointment might be available");
                 System.out.println(e.getMessage());
                 restTemplate.getForEntity("http://localhost:8081/nieFound/" + NIE, String.class);
             }
